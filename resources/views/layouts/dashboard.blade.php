@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@yield('title', 'E-Kinerja Dashboard')</title>
 
-    <!-- Font Awesome untuk ikon -->
+    <!-- Font Awesome untuk ikon (satu saja, tanpa spasi!) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    
+
     <!-- Chart.js untuk grafik -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 
+    <!-- CSS Lokal -->
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
     @stack('styles')
@@ -37,8 +38,7 @@
             <!-- Notifications Dropdown -->
             <div class="dropdown" id="notificationDropdown">
                 <button class="dropdown-toggle">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
+                    <i class="fa-solid fa-bell fa-2x"></i>
                 </button>
                 <div class="dropdown-menu">
                     <div class="dropdown-header">Notifikasi</div>
@@ -67,7 +67,7 @@
             <!-- Profile Info -->
             <div class="user-info">
                 <div class="user-details">
-                    <span class="user-name">{{ auth()->user()->name ?? 'User Name' }}</span>
+                    <span class="user-name">{{ Str::upper(auth()->user()->name ?? 'User Name') }}</span>
                     <span class="user-role">{{ ucfirst(auth()->user()->role ?? 'user') }}</span>
                 </div>
             </div>

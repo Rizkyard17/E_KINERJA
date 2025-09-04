@@ -16,7 +16,7 @@ Route::get('/', function () {
 
 // Login Route
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'loginStore']);
+Route::post('/login', [LoginController::class, 'loginStore'])->name('login.store');
 
 // Logout
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -49,12 +49,3 @@ Route::middleware(['auth'])->group(function () {
     // User
     Route::get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
 });
-
-
-// Login Route
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'loginStore']);
-
-// logout
-// Logout
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
