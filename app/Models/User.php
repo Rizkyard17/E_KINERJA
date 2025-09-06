@@ -2,32 +2,55 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * Nama tabel yang digunakan.
      *
-     * @var list<string>
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
+     * Primary key tabel.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'id_user';
+
+    /**
+     * Kolom yang bisa diisi massal (mass assignable).
+     *
+     * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role'
+        'name',              // username login
+        'nama_lengkap',      // nama lengkap
+        'email',             // email (unique)
+        'password',          // password (hashed)
+        'role',              // peran: user, admin, superadmin
+        'posisi',            // jabatan/posisi
+        'id_profesi',        // foreign key ke profesi
+        'id_kelompok',       // foreign key ke kelompok
+        'tanggal_lahir',     // tanggal lahir
+        'nik',               // nomor induk kependudukan
+        'no_hp',             // nomor handphone
+        'status',            // status: aktif, nonaktif, dll
+        'last_login',        // terakhir login
+        'email_verified_at', // waktu verifikasi email
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Kolom yang harus di-hidden saat di-array atau JSON.
      *
-     * @var list<string>
+     * @var array
      */
     protected $hidden = [
         'password',
@@ -35,15 +58,39 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * Cast atribut ke tipe data tertentu.
      *
-     * @return array<string, string>
+     * @var array
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'tanggal_lahir'     => 'date',
+        'last_login'        => 'datetime',
+        'created_at'        => 'datetime',
+        'updated_at'        => 'datetime',
+    ];
+
+    /**
+     * Mutator: Hash password otomatis saat diset.
+     */
+    public function setPasswordAttribute($value)
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        $this->attributes['password'] = bcrypt($value);
+    }
+
+    /**
+     * Relasi ke tabel Profesi.
+     */
+    public function profesi()
+    {
+        return $this->belongsTo(Profesi::class, 'id_profesi', 'id_profesi');
+    }
+
+    /**
+     * Relasi ke tabel Kelompok.
+     */
+    public function kelompok()
+    {
+        return $this->belongsTo(Kelompok::class, 'id_kelompok', 'id_kelompok');
     }
 }

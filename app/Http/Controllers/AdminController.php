@@ -25,9 +25,4 @@ class AdminController extends Controller
     {
         return view('content.mapping');
     }
-
-    public function profile()
-    {
-        return view('content.profile');
-    }
 }

@@ -22,18 +22,23 @@ class LoginController extends Controller
     }
 
     // Proses login
-    public function loginStore(Request $request)
+   public function loginStore(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'nik' => 'required|integer|digits:16', // NIK harus diisi dan berupa angka
             'password' => 'required|string|min:6',
         ]);
 
-        $user = User::where('name', $request->name)->first();
+        // Cari user berdasarkan NIK
+        $user = User::where('nik', $request->nik)->first();
 
+        // Cek apakah user ditemukan dan password cocok
         if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user);
             $request->session()->regenerate();
+
+            // Update last_login
+            $user->update(['last_login' => now()]);
 
             // Redirect berdasarkan role
             if ($user->role === 'superadmin') {
@@ -45,8 +50,9 @@ class LoginController extends Controller
             }
         }
 
+        // Jika login gagal
         return back()->withErrors([
-            'name' => 'Nama atau password salah.',
+            'nik' => 'NIK atau password salah.',
         ])->withInput($request->except('password'));
     }
 

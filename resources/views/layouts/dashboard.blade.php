@@ -80,7 +80,11 @@
                     </div>
                 </button>
                 <div class="dropdown-menu">
-                    <a href="{{ route('admin.profile') }}" class="dropdown-item">
+                    <a href="{{ 
+                            auth()->user()->role === 'superadmin' ? route('superadmin.profile') : 
+                            (auth()->user()->role === 'admin' ? route('admin.profile') : 
+                            route('user.profile')) 
+                        }}" class="dropdown-item">
                         <i class="fas fa-user-circle"></i>
                         <span>Profil Saya</span>
                     </a>
@@ -123,19 +127,19 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('superadmin.users') }}" class="nav-link {{ request()->routeIs('superadmin.users*') ? 'active' : '' }}">
+                            <a href="{{ route('superadmin.laporan') }}" class="nav-link {{ request()->routeIs('superadmin.laporan*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-users"></i>
                                 <span>Manajemen Pengguna</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('superadmin.logs') }}" class="nav-link {{ request()->routeIs('superadmin.logs*') ? 'active' : '' }}">
+                            <a href="{{ route('superadmin.team') }}" class="nav-link {{ request()->routeIs('superadmin.team*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-file-alt"></i>
                                 <span>Log Sistem</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('superadmin.settings') }}" class="nav-link {{ request()->routeIs('superadmin.settings*') ? 'active' : '' }}">
+                            <a href="{{ route('superadmin.mapping') }}" class="nav-link {{ request()->routeIs('superadmin.mapping*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-cog"></i>
                                 <span>Pengaturan Global</span>
                             </a>

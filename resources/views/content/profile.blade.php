@@ -25,19 +25,36 @@
     <div class="card" id="profileCard">
         <div class="profile-section">
             <div class="profile-avatar" id="avatarContainer">
-                <img src="https://via.placeholder.com/80" alt="Avatar" id="avatarImage">
+                {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
             </div>
-            <div class="profile-name" id="outName">Dimas</div>
+            <div class="profile-name" id="outName"> {{ Str::upper(auth()->user()->name ?? 'Nama Lengkap') }}</div>
+            <div class="profile-role" id="outRole"> {{ auth()->user()->role ?? 'Role'}}</div>
         </div>
 
         <div class="profile-info">
             <div class="info-row">
-                <span class="info-label">NIP</span>
-                <span class="info-value" id="outNip">123456789</span>
+                <span class="info-label">NIK</span>
+                <span class="info-value" id="outNip">{{ Str::upper(auth()->user()->nik ?? 'NIK') }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Email</span>
+                <span class="info-value" id="outEmail">{{ auth()->user()->email ?? 'Email' }}</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Tanggal Lahir</span>
-                <span class="info-value" id="outBirth">14 - Agustus 1999</span>
+                <span class="info-value" id="outBirth">{{ auth()->user()->tanggal_lahir ?? 'TanggalLahir'}}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">No. HP</span>
+                <span class="info-value" id="outHP">{{ auth()->user()->no_hp ?? 'No.HP'}}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Profesi</span>
+                <span class="info-value" id="outProfesi">{{ auth()->user()->posisi ?? 'Profesi'}}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Status</span>
+                <span class="info-value" id="outStatus">{{ auth()->user()->status ?? 'Status'}}</span>
             </div>
         </div>
     </div>
@@ -53,15 +70,15 @@
             <div class="profile-info">
                 <div class="info-row">
                     <span class="info-label">Nama Lengkap</span>
-                    <input type="text" id="inName" value="Dimas Dwi Prakoso">
+                    <input type="text" id="inName" value=" {{ auth()->user()->name ?? 'Nama Lengkap' }}">
                 </div>
                 <div class="info-row">
                     <span class="info-label">NIP</span>
-                    <input type="text" id="inNip" value="123456789">
+                    <input type="text" id="inNip" value=" {{ Str::upper(auth()->user()->nik ?? 'NIK') }}">
                 </div>
                 <div class="info-row">
                     <span class="info-label">Tanggal Lahir</span>
-                    <input type="date" id="inBirth" value="1999-08-14">
+                    <input type="date" id="inBirth" value=" {{ Str::upper(auth()->user()->tanggal_lahir ?? 'Tanggal Lahir') }}">
                 </div>
             </div>
 

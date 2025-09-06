@@ -47,14 +47,16 @@
                     </div>
                     <input
                         type="text"
-                        id="name"
-                        name="name"
+                        id="nik"
+                        name="nik"
                         placeholder=" "
                         autocomplete="off"
                         required
                         autofocus
+                        inputmode="numeric"
+                        maxlength="16"
                     />
-                    <label for="name">Username</label>
+                    <label for="nik">NIK</label>
                 </div>
 
                 <!-- Password -->

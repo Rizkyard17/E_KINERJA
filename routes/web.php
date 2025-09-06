@@ -18,34 +18,59 @@ Route::get('/', function () {
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'loginStore'])->name('login.store');
 
-// Logout
+// Logout (ingat: form logout harus pakai @csrf)
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
 // Semua route yang butuh login
 Route::middleware(['auth'])->group(function () {
+
+    // Redirect dashboard sesuai role user
     Route::get('/dashboard', function () {
         $user = Auth::user();
-
-        if ($user->role === 'superadmin') {
-            return redirect()->route('superadmin.dashboard');
-        } elseif ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        } else {
-            return redirect()->route('user.dashboard');
-        }
+        return match($user->role) {
+            'superadmin' => redirect()->route('superadmin.dashboard'),
+            'admin'      => redirect()->route('admin.dashboard'),
+            default      => redirect()->route('user.dashboard'),
+        };
     })->name('dashboard');
 
-    // Super Admin
-    Route::get('/superadmin/dashboard', [SuperAdminController::class, 'index'])->name('superadmin.dashboard');
-    
-    // Admin
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-    Route::get('/admin/laporan', [AdminController::class, 'laporan'])->name('admin.laporan');
-    Route::get('/admin/team', [AdminController::class, 'team'])->name('admin.team');
-    Route::get('/admin/mapping', [AdminController::class, 'mapping'])->name('admin.mapping');
-    Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
-    
-    // User
-    Route::get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
+
+    /*
+    |--------------------------------------------------------------------------
+    | SuperAdmin Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['role:superadmin'])->group(function () {
+        Route::get('/superadmin/dashboard', [SuperAdminController::class, 'index'])->name('superadmin.dashboard');
+        Route::get('/superadmin/laporan', [SuperAdminController::class, 'laporan'])->name('superadmin.laporan');
+        Route::get('/superadmin/team', [SuperAdminController::class, 'team'])->name('superadmin.team');
+        Route::get('/superadmin/mapping', [SuperAdminController::class, 'mapping'])->name('superadmin.mapping');
+        Route::get('/superadmin/profile', [ProfileController::class, 'index'])->name('superadmin.profile');
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['role:admin'])->group(function () {
+        Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+        Route::get('/admin/laporan', [AdminController::class, 'laporan'])->name('admin.laporan');
+        Route::get('/admin/team', [AdminController::class, 'team'])->name('admin.team');
+        Route::get('/admin/mapping', [AdminController::class, 'mapping'])->name('admin.mapping');
+        Route::get('/admin/profile', [ProfileController::class, 'index'])->name('admin.profile');
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | User Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['role:user'])->group(function () {
+        Route::get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
+    });
+
 });
